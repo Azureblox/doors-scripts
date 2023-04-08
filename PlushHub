@@ -72,7 +72,7 @@ text.TextStrokeTransparency = 0
 
 UIcorner(text)
 
-local plushButton = Instance.new("TextButton")
+--[[local plushButton = Instance.new("TextButton")
 text.Parent = holderFrame
 text.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
 text.Size = UDim2.new(0, 98,0, 41)
@@ -88,4 +88,4 @@ local holderFrame2 = Instance.new("Frame")
 holderFrame2.Parent = UIholder
 holderFrame2.BackgroundColor3 = Color3.fromRGB(61,61,61)
 holderFrame2.Size = UDim2.new(0, 627,0, 375)
-holderFrame2.Position = UDim2.new(0.225, 0,0.177,0)
+holderFrame2.Position = UDim2.new(0.225, 0,0.177,0)]]
