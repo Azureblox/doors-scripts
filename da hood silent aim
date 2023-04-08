@@ -1,113 +1,130 @@
-getgenv().ToggleKey =  (  "e"  )  -- [ Toggles LOCK On And Off ]
+getgenv().Prediction =  (  .1239592  )
  
-getgenv().ResolverToggleKey =  (  "v"  )  -- [ Toggles RESOLVER LOCK On And Off ]
+getgenv().FOV =  (  200  )
  
-getgenv().HideAllWhenAskedToScreenShareKey =  (  "q"  )  -- [ When asked to screenshare, you should click this button, it hides everything! ]
+getgenv().AimKey =  (  "q"  )
  
+getgenv().Notifier = true
  
-getgenv().FOV =  (  250  )   -- [ Increases Or Decreases FOV Radius ]
+getgenv().FOV_VISIBLE = true
  
-getgenv().FOV_Visible = true -- [ "true" or "false", same for below ]
-getgenv().Show_Dot = true -- [ Shows The Dot Or Disables It ]
+getgenv().DontShootThesePeople = {
  
-getgenv().Streaming_Mode = false -- [ On "true", it removes all evidences that point to silent aim automatically. ]
+	"AimLockPsycho";
+	"JakeTheMiddleMan";
  
+}
+
+local SilentAim = true
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Players = game:GetService("Players")
+local Mouse = LocalPlayer:GetMouse()
+local Camera = game:GetService("Workspace").CurrentCamera
+local connections = getconnections(game:GetService("LogService").MessageOut)
+for _, v in ipairs(connections) do
+	v:Disable()
+end
  
-getgenv().RAGEMode = false -- [ Whoever enters the circle gets LOCKED | This MAY OR MAY NOT NOT break resolver ]
+getrawmetatable = getrawmetatable
+setreadonly = setreadonly
+getconnections = getconnections
+hookmetamethod = hookmetamethod
+getgenv = getgenv
+Drawing = Drawing
  
+local FOV_CIRCLE = Drawing.new("Circle")
+FOV_CIRCLE.Visible = getgenv().FOV_VISIBLE
+FOV_CIRCLE.Filled = false
+FOV_CIRCLE.Thickness = 1
+FOV_CIRCLE.Transparency = 1
+FOV_CIRCLE.Color = Color3.new(0,1,0)
+FOV_CIRCLE.Radius = getgenv().FOV
+FOV_CIRCLE.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
  
-getgenv().Prediction =  (  .18  )   -- [ Lower Prediction: Lower Ping | Higher Prediction: Higher Ping | If you ask me "what pred is best" I will actually bite you! ]
+local Options = {
+	Torso = "HumanoidRootPart";
+	Head = "Head";
+}
  
-getgenv().Auto_Prediction = false -- [ The below predictions ONLY APPLY if you made this "true", otherwise ignore ]
-getgenv().Assigned_Predictions = { --# Assign Prediction Values Per Sets | DO NOT DELETE THESE ";" commas!
+local function MoveFovCircle()
+	pcall(function()
+		local DoIt = true
+		spawn(function()
+			while DoIt do task.wait()
+				FOV_CIRCLE.Position = Vector2.new(Mouse.X, (Mouse.Y + 36))
+			end
+		end)
+	end)
+end coroutine.wrap(MoveFovCircle)()
  
-    .155; -- [ 5 Ping ]
-    .156; -- [ 10 Ping]
-    .160; -- [ 20 Ping ]
-    .163; -- [ 30 Ping ]
-    .166; -- [ 40 Ping ]
-    .179; -- [ 50 Ping ]
-    .172; -- [ 60 Ping ]
-    .175; -- [ 70 Ping ]
-    .177; -- [ 80 Ping ]
-    .18; -- [ 90 Ping ]
-    .183; -- [ 100 Ping ]
-    .187; -- [ 110 Ping ]
-    .2; -- [ 120 Ping ]
-    .23; -- [ 130 Ping ]
-    .26; -- [ 140 Ping ]
-    .3; -- [ 150 Ping ]
-    .33; -- [ 160 Ping ] [ "Questionable ping" ]
-    .37; -- [ 170 Ping ]
-    .44; -- [ 180 Ping ]
-    .49; -- [ 190 Ping ]
-    .55; -- [ 200 Ping ] [ "TRASH ping" ]
-    .61; -- [ 210 Ping ]
-    .68; -- [ 220 Ping ]
-    .74; -- [ 230 Ping ]
-    .82; -- [ 240 Ping ]
-    .9; -- [ 250 Ping ]
-    1; -- [ 260 Ping ] [ No point in using silent aim ain't gonna hit anything at this point lul ]
+game.StarterGui:SetCore("SendNotification", {Title = "Silent Aim ON", Text = "TOGGLED", Duration = 5,}) -- initially on.
  
-};  --#SETS_COUNT [ 27 ]
+local function ItsOn()
+	game.StarterGui:SetCore("SendNotification", {Title = "Silent Aim ON", Text = "TOGGLED", Duration = 5,})
+end
+local function ItsOff()
+	game.StarterGui:SetCore("SendNotification", {Title = "Silent Aim OFF", Text = "UN-TOGGLED", Duration = 5,})
+end
  
+Mouse.KeyDown:Connect(function(KeyPressed)
+	if KeyPressed == (getgenv().AimKey:lower()) then
+		if SilentAim == false then
+			FOV_CIRCLE.Transparency = 1
+			SilentAim = true
+			ItsOn()
+		elseif SilentAim == true then
+			FOV_CIRCLE.Transparency = 0
+			SilentAim = false
+			ItsOff()
+		end
+	end
+end)
+Mouse.KeyDown:Connect(function(Rejoin)
+	if Rejoin == "=" then
+		local LocalPlayer = game:GetService("Players").LocalPlayer
+		game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
+	end
+end)
  
-getgenv().IgnoreWalls = false -- [ "true" or "false" | TURN THIS TO "true" FOR "HOOD MODDED" IT WILL FIX THE STUPID NOT TOGGLING ISSUES ]
+local oldIndex = nil 
+oldIndex = hookmetamethod(game, "__index", function(self, Index)
+	if self == Mouse and (Index == "Hit") then 
+		if SilentAim then
+			local Distance = 9e9
+			local Target = nil
+			local Players = game:GetService("Players")
+			local LocalPlayer = game:GetService("Players").LocalPlayer
+			local Camera = game:GetService("Workspace").CurrentCamera
+			for _, v in pairs(Players:GetPlayers()) do 
+				if not table.find(getgenv().DontShootThesePeople, v.Name) then
+					if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("Humanoid").Health > 0 then
+						local Enemy = v.Character	
+						local CastingFrom = CFrame.new(Camera.CFrame.Position, Enemy[Options.Torso].CFrame.Position) * CFrame.new(0, 0, -4)
+						local RayCast = Ray.new(CastingFrom.Position, CastingFrom.LookVector * 9000)
+						local World, ToSpace = game:GetService("Workspace"):FindPartOnRayWithIgnoreList(RayCast, {LocalPlayer.Character:FindFirstChild("Head")})
+						local RootWorld = (Enemy[Options.Torso].CFrame.Position - ToSpace).magnitude
+						if RootWorld < 4 then		
+							local RootPartPosition, Visible = Camera:WorldToScreenPoint(Enemy[Options.Torso].Position)
+							if Visible then
+								local Real_Magnitude = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(RootPartPosition.X, RootPartPosition.Y)).Magnitude
+								if Real_Magnitude < Distance and Real_Magnitude < FOV_CIRCLE.Radius then
+									Distance = Real_Magnitude
+									Target = Enemy
+								end
+							end
+						end
+					end
+				end
+			end
  
- 
-getgenv().FaceLockDirection = false -- [ "true" makes this look at the player you're locking onto | THIS IS SUBJECT TO JITTERING! ]
- 
- 
-getgenv().DontShootMyFriends = true -- [ "true" or "false" | If this is on "true", when you toggle on to your friends it won't work ]
-getgenv().DontShootThesePeople = {  -- [ List Of Who Not To Target like this. "Quotations with their name and then a comma afterwards for each line"; ]
- 
-    "Player1";
-    "Player2";
-    "Noob3";
-    "Roblox";
-    "You can go on and on forever";
- 
-};
- 
- 
-getgenv().HitParts = false  -- [ Default is false but if you are streaming or want to look legit make this "true" ]
-getgenv().Randomized_HitParts = {  -- [ Lock will target the following parts | MORE HITPARTS ALLOWED = SLOWER LOCK ]
- 
-    "Head";
-    --"HumanoidRootPart"; -- This is kinda extra and slows lock down
-    --"UpperTorso"; -- This is gonna make you hit above the torso almost so its basically torso, therefore I disable it here
-    "LowerTorso";
-    --"RightHand"; -- This is kinda extra and slows lock down
-    "RightLowerArm";
-    "RightUpperArm";
-    "LeftUpperArm";
-    "LeftLowerArm";
-    --"LeftHand"; -- This is kinda extra and slows lock down
-    "LeftUpperLeg";
-    "LeftLowerLeg";
-    --"LeftFoot"; -- This is kinda extra and slows lock down
-    "RightUpperLeg";
-    "RightLowerLeg";
-    --"RightFoot"; -- This is kinda extra and slows lock down
- 
-};
- 
- 
---[[
- 
-    Example of how to use!
- 
-    HitPart TARGETS head: "Head";
-    HitPart IGNORES head: --"Head";
- 
-    The "--" before the text is there so it can be ignored!
- 
-    You can also straight up delete the entire hitpart from the script and it works fine
- 
-    Some of these options contain basic; "true or false" statements
- 
-    Spell your "true" and "false" options correctly in all lowercase or it will error!
- 
-    You may delete all the comments (grey text in your executor)
- 
---]]
+			if Target ~= nil and Target[Options.Torso] and Target:FindFirstChild("Humanoid").Health > 0 then
+				if SilentAim then
+					local ShootThis = Target[Options.Torso]
+					local Predicted_Position = ShootThis.CFrame + (ShootThis.Velocity * getgenv().Prediction + Vector3.new(0,-.5,0))
+					return ((Index == "Hit" and Predicted_Position))
+				end
+			end
+		end
+	end
+	return oldIndex(self, Index)
+end)]]
