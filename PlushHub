@@ -72,8 +72,20 @@ text.TextStrokeTransparency = 0
 
 UIcorner(text)
 
---local holderFrame2 = Instance.new("Frame")
---holderFrame.Parent = UIholder
---holderFrame.BackgroundColor3 = Color3.fromRGB(61,61,61)
---holderFrame.Size = UDim2.new(0, 627,0, 375)
---holderFrame.Position = UDim2.new(0.225, 0,0.177,0)
+local plushButton = Instance.new("TextButton")
+text.Parent = holderFrame
+text.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+text.Size = UDim2.new(0, 98,0, 41)
+text.Position = UDim2.new(0, 0,0.133, 0)
+text.Font = Enum.Font.Arial
+text.Text = "Doors Plushy Hub by @dababy123123"
+text.TextColor3 = Color3.fromRGB(255,255,255)
+text.TextScaled = true
+text.TextStrokeColor3 = Color3.fromRGB(255,255,255)
+text.TextStrokeTransparency = 0
+
+local holderFrame2 = Instance.new("Frame")
+holderFrame2.Parent = UIholder
+holderFrame2.BackgroundColor3 = Color3.fromRGB(61,61,61)
+holderFrame2.Size = UDim2.new(0, 627,0, 375)
+holderFrame2.Position = UDim2.new(0.225, 0,0.177,0)
