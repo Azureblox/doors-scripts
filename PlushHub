@@ -1,0 +1,79 @@
+-- Plushy Hub by @dababy123123
+
+local plr = game.Players.LocalPlayer
+
+local plrUI = plr.PlayerGui
+
+local UIS = game:GetService("UserInputService")
+
+local function UIcorner(ui)
+	local corner = Instance.new("UICorner")
+	corner.Parent = ui
+end
+
+function dragify(Frame)
+	dragToggle = nil
+	dragSpeed = 0.15
+	dragInput = nil
+	dragStart = nil
+	dragPos = nil
+	function updateInput(input)
+		Delta = input.Position - dragStart
+		Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+		game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.15), {Position = Position}):Play()
+	end
+	Frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+			dragToggle = true
+			dragStart = input.Position
+			startPos = Frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+	Frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if input == dragInput and dragToggle then
+			updateInput(input)
+		end
+	end)
+end
+
+local UIholder = Instance.new("ScreenGui")
+UIholder.Parent = plrUI
+
+local holderFrame = Instance.new("Frame")
+holderFrame.Parent = UIholder
+holderFrame.BackgroundColor3 = Color3.fromRGB(61,61,61)
+holderFrame.Size = UDim2.new(0, 627,0, 375)
+holderFrame.Position = UDim2.new(0.225, 0,0.177,0)
+
+UIcorner(holderFrame)
+dragify(holderFrame)
+
+local text = Instance.new("TextLabel")
+text.Parent = holderFrame
+text.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+text.Size = UDim2.new(0, 627,0, 50)
+text.Position = UDim2.new(0,0,0,0)
+text.Font = Enum.Font.Arial
+text.Text = "Doors Plushy Hub by @dababy123123"
+text.TextColor3 = Color3.fromRGB(255,255,255)
+text.TextScaled = true
+text.TextStrokeColor3 = Color3.fromRGB(255,255,255)
+text.TextStrokeTransparency = 0
+
+UIcorner(text)
+
+--local holderFrame2 = Instance.new("Frame")
+--holderFrame.Parent = UIholder
+--holderFrame.BackgroundColor3 = Color3.fromRGB(61,61,61)
+--holderFrame.Size = UDim2.new(0, 627,0, 375)
+--holderFrame.Position = UDim2.new(0.225, 0,0.177,0)
