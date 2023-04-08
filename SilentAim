@@ -2,19 +2,19 @@ getgenv().Prediction =  (  .1239592  )
  
 getgenv().FOV =  (  200  )
  
-getgenv().AimKey =  (  "e"  )
+getgenv().AimKey =  (  "q"  )
  
 getgenv().Notifier = true
  
 getgenv().FOV_VISIBLE = true
  
 getgenv().DontShootThesePeople = {
-
+ 
 	"AimLockPsycho";
 	"JakeTheMiddleMan";
  
 }
- 
+
 local SilentAim = true
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Players = game:GetService("Players")
