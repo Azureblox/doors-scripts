@@ -1,10 +1,14 @@
 -- Plushy Hub by @dababy123123
 
+-- Variables
+
 local plr = game.Players.LocalPlayer
 
 local plrUI = plr.PlayerGui
 
 local UIS = game:GetService("UserInputService")
+
+-- Functions
 
 local function UIcorner(ui)
 	local corner = Instance.new("UICorner")
@@ -46,6 +50,8 @@ function dragify(Frame)
 	end)
 end
 
+-- Creating the UI
+
 local UIholder = Instance.new("ScreenGui")
 UIholder.Parent = plrUI
 
@@ -72,20 +78,62 @@ text.TextStrokeTransparency = 0
 
 UIcorner(text)
 
---[[local plushButton = Instance.new("TextButton")
-text.Parent = holderFrame
-text.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
-text.Size = UDim2.new(0, 98,0, 41)
-text.Position = UDim2.new(0, 0,0.133, 0)
-text.Font = Enum.Font.Arial
-text.Text = "Doors Plushy Hub by @dababy123123"
-text.TextColor3 = Color3.fromRGB(255,255,255)
-text.TextScaled = true
-text.TextStrokeColor3 = Color3.fromRGB(255,255,255)
-text.TextStrokeTransparency = 0
+local plushButton = Instance.new("TextButton")
+plushButton.Parent = holderFrame
+plushButton.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+plushButton.Size = UDim2.new(0, 98,0, 41)
+plushButton.Position = UDim2.new(0, 0,0.133, 0)
+plushButton.Font = Enum.Font.Arial
+plushButton.Text = "Plushies"
+plushButton.TextColor3 = Color3.fromRGB(255,255,255)
+plushButton.TextScaled = true
+plushButton.TextStrokeColor3 = Color3.fromRGB(255,255,255)
+plushButton.TextStrokeTransparency = 0
+
+UIcorner(plushButton)
 
 local holderFrame2 = Instance.new("Frame")
-holderFrame2.Parent = UIholder
-holderFrame2.BackgroundColor3 = Color3.fromRGB(61,61,61)
-holderFrame2.Size = UDim2.new(0, 627,0, 375)
-holderFrame2.Position = UDim2.new(0.225, 0,0.177,0)]]
+holderFrame2.Name = "Tab1"
+holderFrame2.Parent = holderFrame
+holderFrame2.BackgroundColor3 = Color3.fromRGB(36,36,36)
+holderFrame2.Size = UDim2.new(0, 511,0, 302)
+holderFrame2.Position = UDim2.new(0.167, 0,0.16, 0)
+holderFrame2.BackgroundTransparency = 0.5
+
+UIcorner(holderFrame2)
+
+local screechButton = Instance.new("TextButton")
+screechButton.Parent = holderFrame2
+screechButton.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+screechButton.Size = UDim2.new(0, 492,0, 36)
+screechButton.Position = UDim2.new(0.022, 0,0.03, 0)
+screechButton.Font = Enum.Font.Arial
+screechButton.Text = "Get Screech Plushy"
+screechButton.TextColor3 = Color3.fromRGB(255,255,255)
+screechButton.TextScaled = true
+screechButton.TextStrokeColor3 = Color3.fromRGB(255,255,255)
+screechButton.TextStrokeTransparency = 0
+
+screechButton.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/dababy123123/doors-scripts/main/screech%20plush"))()
+end)
+
+UIcorner(screechButton)
+
+local dupeButton = Instance.new("TextButton")
+dupeButton.Parent = holderFrame2
+dupeButton.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+dupeButton.Size = UDim2.new(0, 492,0, 36)
+dupeButton.Position = UDim2.new(0.022, 0,0.182, 0)
+dupeButton.Font = Enum.Font.Arial
+dupeButton.Text = "Get Dupe Plushy"
+dupeButton.TextColor3 = Color3.fromRGB(255,255,255)
+dupeButton.TextScaled = true
+dupeButton.TextStrokeColor3 = Color3.fromRGB(255,255,255)
+dupeButton.TextStrokeTransparency = 0
+
+UIcorner(dupeButton)
+
+dupeButton.MouseButton1Click:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/dababy123123/doors-scripts/main/dupePlush"))()
+end)
