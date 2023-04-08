@@ -2,18 +2,19 @@ getgenv().Prediction =  (  .1239592  )
  
 getgenv().FOV =  (  200  )
  
-getgenv().AimKey =  (  "q"  )
+getgenv().AimKey =  (  "e"  )
  
 getgenv().Notifier = true
  
 getgenv().FOV_VISIBLE = true
  
 getgenv().DontShootThesePeople = {
- 
-	
+
+	"AimLockPsycho";
+	"JakeTheMiddleMan";
  
 }
-
+ 
 local SilentAim = true
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Players = game:GetService("Players")
@@ -126,4 +127,4 @@ oldIndex = hookmetamethod(game, "__index", function(self, Index)
 		end
 	end
 	return oldIndex(self, Index)
-end)]]
+end)
