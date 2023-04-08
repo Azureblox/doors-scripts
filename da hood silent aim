@@ -111,6 +111,3 @@ getgenv().Randomized_HitParts = {  -- [ Lock will target the following parts | M
     You may delete all the comments (grey text in your executor)
  
 --]]
- 
- 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Nosssa/NossLock/main/ReZero", true))();
